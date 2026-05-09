@@ -1,18 +1,27 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
+from processor import process_result
 import tempfile
 import shutil
 import os
 
-from processor import process_result
 
 app = FastAPI()
 
-UPLOAD_DIR = "uploads"
-OUTPUT_DIR = "outputs"
+origins = [
+    "http://127.0.0.1:5500",
+    "https://cbseproject.academichub.in",
+    "https://cbseproject.com"
+]
 
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 SUBJECT_FILE = "subcode12.xlsx"
 
